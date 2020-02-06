@@ -1,0 +1,116 @@
+## Non-functional code, working to make moves
+## based on how many times the robot has visited 
+## a particular spot
+
+import random
+position = [9,0]
+
+def turn_right():
+    for i in range(3):
+        turn_left()
+ 
+def circumnavigate():
+    for i in range(4):
+        while not wall_in_front():
+            move()
+        turn_left()
+        
+def left_is_clear():
+    turn_left()
+    toReturn = front_is_clear()
+    turn_right()
+    return toReturn
+
+def back_is_clear():
+    turn_left()
+    turn_left()
+    toReturn = front_is_clear()
+    turn_left()
+    turn_left()
+    return toReturn
+
+def move_right():
+    turn_right()
+    move()
+    
+    turn_right()
+    
+    position = [position[0]][position[1]+1]
+    
+def move_left():
+    turn_left()
+    move()
+    
+    turn_right()
+    
+    position = [position[0]][position[1]-1]
+    
+def move_back():
+    turn_left()
+    turn_left()
+    move()
+    
+    turn_left()
+    turn_left()
+    
+    position = [position[0]+1][position[1]]
+
+board = [       
+    [1,1,1,1,1,1,1,1,1,1], 
+    [1,1,1,1,1,1,1,1,1,1], 
+    [1,1,1,1,1,1,1,1,1,1], 
+    [1,1,1,1,1,1,1,1,1,1], 
+    [1,1,1,1,1,1,1,1,1,1], 
+    [1,1,1,1,1,1,1,1,1,1], 
+    [1,1,1,1,1,1,1,1,1,1], 
+    [1,1,1,1,1,1,1,1,1,1], 
+    [1,1,1,1,1,1,1,1,1,1], 
+    [1,1,1,1,1,1,1,1,1,1]
+   
+]
+        
+def basic_algo():
+    while object_here() != False:
+        moves = []
+        
+        if front_is_clear():
+            moves.append(board[position[0]],[position[1]])
+        
+        if right_is_clear():
+            moves.append(2)
+        
+        if left_is_clear():
+            moves.append(3)
+        
+        if back_is_clear():
+            moves.append(4)
+            
+        largest = 0
+        index = 0
+        largest_index = 0
+        for i in range moves.len():
+            if i > largest:
+                largest = i
+                largest_index = index
+                index++
+        
+        if moves[largest_index] == 1:
+            move()
+            
+            position = [position[0]-1,position[1]]
+        elif moves[largest_index] == 2:
+            move_right()
+            position = [position[0],position[1]+1]
+        elif moves[largest_index] == 3:
+            move_left()
+            position = [position[0],position[1]-1]
+        elif moves[largest_index] == 4:
+            move_back()
+            position = [position[0]+1,position[1]]
+            
+        board[position[0]][position[1]] = board[position[0]][position[1]]++
+
+set_max_nb_steps(1000)
+turn_left()
+think(100)        
+basic_algo()
